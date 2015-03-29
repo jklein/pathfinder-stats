@@ -1,0 +1,14 @@
+{
+    "name": "jklein/pathfinder-stats",
+    "authors": [
+        {
+            "name": "Jonathan Klein",
+            "email": "jonathan.n.klein@gmail.com"
+        }
+    ],
+    "require": {
+    	"slim/slim": "2.6.*",
+    	"guzzlehttp/guzzle": "5.*",
+    	"nesbot/carbon": "~1.18"
+    }
+}
