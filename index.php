@@ -29,7 +29,7 @@ $app->get('/', function () use ($app) {
 });
 
 $app->get('/stats?roster=:roster', function ($roster) use ($app) {
-    $data = gather_data($roster);
+    $roster_data = gather_data($roster);
 
     $start_date = Carbon::parse(START_DATE);
     $end_date = Carbon::parse(END_DATE);
@@ -37,18 +37,19 @@ $app->get('/stats?roster=:roster', function ($roster) use ($app) {
     $days_done = $start_date->diffInDays(Carbon::now());
 
     $data = [
-        'miles_done'       => $data['miles'],
+        'miles_done'       => $roster_data['miles'],
         'miles_total'      => MILES_TOTAL,
-        'workouts_done'    => $data['workouts'],
+        'workouts_done'    => $roster_data['workouts'],
         'workouts_total'   => WORKOUTS_TOTAL,
-        'team_lead_done'   => $data['team_lead'],
+        'team_lead_done'   => $roster_data['team_lead'],
         'team_lead_total'  => TEAM_LEAD_TOTAL,
-        'challenges_done'  => $data['challenges'],
+        'challenges_done'  => $roster_data['challenges'],
         'challenges_total' => CHALLENGES_TOTAL,
         'days_done'        => $days_done,
         'days_total'       => $total_days,
         'overall_progress' => $days_done/$total_days,
         'person'           => $roster,
+        'raw_logs'         => $roster_data['raw_logs'],
     ];
 
     $app->render('stats.php', $data);

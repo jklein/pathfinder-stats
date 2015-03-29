@@ -70,10 +70,17 @@ function gather_data($roster) {
         'workouts'   => 0,
         'team_lead'  => 0,
         'challenges' => 0,
+        'raw_logs'   => $table->innerHtml,
     ];
 
     foreach ($rows as $row) {
-        $columns            = $row->find('td');
+        $columns = $row->find('td');
+
+        // Skip the first row
+        if ($columns[0]->innerHtml == 'ENTRY DATE') {
+            continue;
+        }
+
 
         $date               = $columns[0]->innerHtml;
         $start_time         = $columns[1]->innerHtml;

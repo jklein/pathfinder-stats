@@ -18,6 +18,10 @@ include 'header.php'
 <h3>Challenges</h3>
 <?=progress_bar($overall_progress, $challenges_done, $challenges_total);?>
 
+<h3>Raw Logs</h3>
+<table class="table">
+    <?=$raw_logs;?>
+</table>
 
 <?php
 include 'footer.php'
