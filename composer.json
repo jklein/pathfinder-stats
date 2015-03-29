@@ -9,6 +9,7 @@
     "require": {
     	"slim/slim": "2.6.*",
     	"guzzlehttp/guzzle": "5.*",
+        "paquettg/php-html-parser": "1.6.*",
     	"nesbot/carbon": "~1.18"
     }
 }

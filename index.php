@@ -18,35 +18,40 @@ define('MILES_TOTAL', 100);
 define('WORKOUTS_TOTAL', 20);
 define('TEAM_LEAD_TOTAL', 3);
 define('CHALLENGES_TOTAL', 5);
+
+define('NUM_PARTICIPANTS', 121);
 define('START_DATE', '2015-03-01 00:00:00');
 define('END_DATE', '2015-06-01 00:00:00');
 
 
 $app->get('/', function () use ($app) {
+    $app->render('home.php');
+});
+
+$app->get('/stats?roster=:roster', function ($roster) use ($app) {
+    $data = gather_data($roster);
+
     $start_date = Carbon::parse(START_DATE);
     $end_date = Carbon::parse(END_DATE);
     $total_days = $end_date->diffInDays($start_date);
     $days_done = $start_date->diffInDays(Carbon::now());
 
     $data = [
-        'miles_done'       => 32,
+        'miles_done'       => $data['miles'],
         'miles_total'      => MILES_TOTAL,
-        'workouts_done'    => 5,
+        'workouts_done'    => $data['workouts'],
         'workouts_total'   => WORKOUTS_TOTAL,
-        'team_lead_done'   => 1,
+        'team_lead_done'   => $data['team_lead'],
         'team_lead_total'  => TEAM_LEAD_TOTAL,
-        'challenges_done'  => 3,
+        'challenges_done'  => $data['challenges'],
         'challenges_total' => CHALLENGES_TOTAL,
         'days_done'        => $days_done,
         'days_total'       => $total_days,
         'overall_progress' => $days_done/$total_days,
-        'person'           => 'Jonathan Klein',
+        'person'           => $roster,
     ];
 
     $app->render('stats.php', $data);
 });
 
-$app->get('/hello/:name', function ($name) {
-    echo "Hello, $name";
-});
 $app->run();
