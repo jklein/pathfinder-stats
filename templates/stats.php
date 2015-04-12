@@ -7,7 +7,12 @@ include 'header.php'
 <?=progress_bar($overall_progress, $days_done, $days_total);?>
 
 <h3>Miles</h3>
-<?=progress_bar($overall_progress, $miles_done, $miles_total);?>        
+<?=progress_bar($overall_progress, $miles_done, $miles_total);?>    
+
+<?php if ($miles_done > 100) {
+    echo '<h3>Progress Towards 200 Mile Challenge</h3>';
+    echo progress_bar($overall_progress, $miles_done, ($miles_total+100));
+} ?>
 
 <h3>Workouts</h3>
 <?=progress_bar($overall_progress, $workouts_done, $workouts_total);?>
