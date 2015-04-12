@@ -5,7 +5,7 @@ include 'header.php'
 
 <form action="/stats" method="GET" class="form-inline">
 	<div class="form-group">
-		<select class="form-control" name="roster">
+		<select class="form-control" name="roster" onChange="this.form.submit();">
 			<option value="1-004">1-004</option>
 			<option value="3-005">3-005</option>
 			<option value="3-009">3-009</option>
@@ -21,9 +21,6 @@ include 'header.php'
 			<option value="4-073">4-073</option>
 			<?=options();?>
 		</select>
-	</div>
-	<div class="form-group">
-		<input class="btn btn-primary" type="submit" value="Go">
 	</div>
 </form>
 

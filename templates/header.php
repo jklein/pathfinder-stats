@@ -42,7 +42,7 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#"><?=isset($person) ? $person : '&nbsp;';?></a></li>
+            <li class="active"><a href="#"><?=isset($person) ? $person : 'Choose Your Roster Number';?></a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
