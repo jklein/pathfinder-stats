@@ -49,7 +49,7 @@ $app->get('/stats?roster=:roster', function ($roster) use ($app) {
         'days_total'       => $total_days,
         'overall_progress' => $days_done/$total_days,
         'person'           => $roster,
-        'raw_logs'         => $roster_data['raw_logs'],
+        'log_html'         => $roster_data['log_html'],
     ];
 
     $app->render('stats.php', $data);

@@ -2,10 +2,10 @@
 use PHPHtmlParser\Dom;
 
 function progress_bar($progress, $num_done, $num_total) {
-    $overall_percent = $progress * 100;
+    $overall_percent = $progress > 1 ? 100 : $progress * 100;
     $this_percent = ($num_done / $num_total) * 100;
 
-    if ($this_percent > 100) {
+    if ($this_percent >= 100) {
         $this_percent = 100;
         $text = 'Complete! (' . $num_done . ' / ' . $num_total . ')';
     } else {
@@ -43,68 +43,59 @@ function gather_data($roster) {
     $client = new GuzzleHttp\Client();
     $jar = new GuzzleHttp\Cookie\CookieJar();
 
-    $response = $client->post('http://www.teamspearhead.com/wp-login.php?action=postpass', [
-        'body' => [
-            'post_password' => 'PF005',
-            'Submit' => 'submit',
-        ],
-        'cookies' => $jar
-    ]);
+    $query = "select+D,+E,+F,+G,+H,+I,+J,+K,+L+where+B+starts+with+%27" . $roster . "%27";
+    $key = "1lAi2-TQPduWoqA7MqyFCpP8ZLaRXzaxq5qbcXAffnvk";
 
+    $url = "https://docs.google.com/spreadsheets/d/" . $key . "/gviz/tq?tqx=out:csv&tq=" . $query;
 
-    $reponse_two = $client->post('http://www.teamspearhead.com/pathfinder-005-log-viewer/', [
-        'body' => [
-            'roster' => $roster,
-        ],
-        'cookies' => $jar
-    ]);
+    $response = $client->get($url);
+    $body = $response->getBody();
 
-    $code = $reponse_two->getStatusCode();
-    $body = $reponse_two->getBody();
+    $body_string = $body->getContents();
 
-    $dom = new Dom;
-    $dom->load($body);
-    $table = $dom->find('table')[0];
-
-    $dom_two = new Dom;
-
-    $dom_two->load($table->innerHtml);
-
-    $rows = $dom_two->find('tr');
+    $results = array_map('str_getcsv', str_getcsv($body_string, "\n"));
 
     $return = [
         'miles'      => 0,
         'workouts'   => 0,
         'team_lead'  => 0,
         'challenges' => 0,
-        'raw_logs'   => $table->innerHtml,
+        'log_html'   => '',
     ];
 
-    foreach ($rows as $row) {
-        $columns = $row->find('td');
-
+    foreach ($results as $row) {
         // Skip the first row
-        if ($columns[0]->innerHtml == 'ENTRY DATE') {
+        if ($row[0] == 'ENTRY DATE' || count($row) < 9) {
             continue;
         }
 
-
-        $date               = $columns[0]->innerHtml;
-        $start_time         = $columns[1]->innerHtml;
-        $duration           = $columns[2]->innerHtml;
-        $miles              = $columns[3]->innerHtml;
-        $workouts           = $columns[4]->innerHtml;
-        $team_lead          = $columns[5]->innerHtml;
-        $selection_standard = $columns[6]->innerHtml;
-        $challenge          = $columns[7]->innerHtml;
-        $notes              = $columns[8]->innerHtml;
+        $date               = $row[0];
+        $start_time         = $row[1];
+        $duration           = $row[2];
+        $miles              = $row[3];
+        $workouts           = $row[4] == 'WORKOUT' ? '<span class="glyphicon glyphicon-ok"></span>' : '';
+        $team_lead          = $row[5] == 'TEAM LEADER' ? '<span class="glyphicon glyphicon-ok"></span>' : '';
+        $selection_standard = $row[6];
+        $challenge          = $row[7];
+        $notes              = $row[8];
         
         $return['miles']      += (is_numeric($miles) ? $miles : 0);
-        $return['workouts']   += ($workouts == 'WORKOUT' ? 1 : 0);
-        $return['team_lead']  += ($team_lead == 'TEAM LEADER' ? 1 : 0);
-        $return['challenges'] += ($challenge != '&nbsp;' ? 1 : 0);
+        $return['workouts']   += (!empty($workouts) ? 1 : 0);
+        $return['team_lead']  += (!empty($team_lead) ? 1 : 0);
+        $return['challenges'] += (!empty($challenge) ? 1 : 0);
+
+        $return['log_html'] .= "<tr>
+                                    <td>$date</td>
+                                    <td>$start_time</td>
+                                    <td>$duration</td>
+                                    <td>$miles</td>
+                                    <td>$workouts</td>
+                                    <td>$team_lead</td>
+                                    <td>$selection_standard</td>
+                                    <td class='wrap'>$challenge</td>
+                                    <td class='wrap'>$notes</td>
+                                </tr>";
     }
 
     return $return;
-
 }

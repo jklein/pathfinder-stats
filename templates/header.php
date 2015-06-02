@@ -17,8 +17,18 @@
         padding-top: 50px;
     }
     .starter_template {
-      padding: 40px 15px;
+        padding: 40px 15px;
+        text-align: center;
+    }
+    table th {
       text-align: center;
+    }
+    table td {
+      text-align: left;
+      white-space: nowrap;
+    }
+    table td.wrap {
+      white-space: normal; 
     }
     </style>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
