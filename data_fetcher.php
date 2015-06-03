@@ -4,14 +4,16 @@ class DataFetcher {
 
     public static $class_data = [
         "005" => [
-            "START_DATE" => '2015-03-01 00:00:00',
-            "END_DATE"   => '2015-06-01 00:00:00',
-            "KEY"        => '1lAi2-TQPduWoqA7MqyFCpP8ZLaRXzaxq5qbcXAffnvk',
+            "START_DATE"   => '2015-03-01 00:00:00',
+            "END_DATE"     => '2015-06-01 00:00:00',
+            "KEY"          => '1lAi2-TQPduWoqA7MqyFCpP8ZLaRXzaxq5qbcXAffnvk',
+            'ROSTER_QUERY' => "select+B",
         ],
         "006" => [
-            "START_DATE" => '2015-06-01 00:00:00',
-            "END_DATE"   => '2015-09-01 00:00:00',
-            "KEY"        => '1F3LgSum81KLFkd2a36356c-6jN-gb3C5-wlkKigXDkg',
+            "START_DATE"   => '2015-06-01 00:00:00',
+            "END_DATE"     => '2015-09-01 00:00:00',
+            "KEY"          => '1F3LgSum81KLFkd2a36356c-6jN-gb3C5-wlkKigXDkg',
+            'ROSTER_QUERY' => "select+M",
         ],
     ];
 
@@ -36,7 +38,8 @@ class DataFetcher {
 
     public static function getRosters($class) {
         $client = self::getClient();
-        $url = self::buildUrl($class, "select+B");
+
+        $url = self::buildUrl($class, self::$class_data[$class]['ROSTER_QUERY']);
 
         $response = $client->get($url);
         $body = $response->getBody();
@@ -80,7 +83,7 @@ class DataFetcher {
             if ($row["ENTRY DATE"] == 'ENTRY DATE' || count($row) < 9) {
                 continue;
             }
-  
+
             $date               = $row["ENTRY DATE"];
             $start_time         = $row["ENTRY START TIME "];
             $duration           = str_replace(" AM", "", $row["ENTRY DURATION"]);
@@ -89,7 +92,7 @@ class DataFetcher {
             $team_lead          = $row["WORKOUT TEAM LEADER"] == 'TEAM LEADER' ? self::$check_mark : '';
             $selection_standard = $row["SELECTION STANDARD ATTEMPT"];
             $challenge          = $row["REQUIRED CHALLENGE COMPLETED?"];
-            $notes              = str_replace("\n", "<br/>", $row["ENTRY NOTES"]);
+            $notes              = str_replace("\n", "<br/>", $row["YOUR NAME and ENTRY NOTES"]);
             
             $return['miles']      += (is_numeric($miles) ? $miles : 0);
             $return['workouts']   += (!empty($workouts) ? 1 : 0);
