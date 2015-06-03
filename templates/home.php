@@ -1,29 +1,20 @@
 <?php
-include 'header.php'
-?>
+include 'header.php';
 
+foreach ($roster_data as $class => $rosters) {
+    echo '<form action="/stats" method="GET" class="form-inline">';
+    echo "<h3>Rosters for Class $class</h3>";
+    echo '<div class="form-group">' . PHP_EOL;
+    echo '<input type="hidden" name="class" value="' . $class . '" />';
+    echo '<select class="form-control" name="roster" onChange="this.form.submit();">' . PHP_EOL;
+    foreach ($rosters as $roster) {
+        $roster_name = str_replace('"', '', $roster);
+        $roster_number = explode(' ', $roster_name)[0];
+        echo '<option value="' . $roster_number . '">' . $roster_name . '</option>' . PHP_EOL;
+    }
+    echo '</select>' . PHP_EOL;
+    echo '</div>' . PHP_EOL;
+    echo '</form>';
+}
 
-<form action="/stats" method="GET" class="form-inline">
-	<div class="form-group">
-		<select class="form-control" name="roster" onChange="this.form.submit();">
-			<option value="1-004">1-004</option>
-			<option value="3-005">3-005</option>
-			<option value="3-009">3-009</option>
-			<option value="3-010">3-010</option>
-			<option value="3-013">3-013</option>
-			<option value="3-015">3-015</option>
-			<option value="3-043">3-043</option>
-			<option value="4-005">4-005</option>
-			<option value="4-017">4-017</option>
-			<option value="4-018">4-018</option>
-			<option value="4-047">4-047</option>
-			<option value="4-068">4-068</option>
-			<option value="4-073">4-073</option>
-			<?=options();?>
-		</select>
-	</div>
-</form>
-
-<?php
-include 'footer.php'
-?>
+include 'footer.php';

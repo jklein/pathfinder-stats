@@ -11,6 +11,7 @@
     	"guzzlehttp/guzzle": "5.*",
         "paquettg/php-html-parser": "1.6.*",
     	"nesbot/carbon": "~1.18",
-        "symfony/var-dumper": "^2.7"
+        "symfony/var-dumper": "^2.7",
+        "parsecsv/php-parsecsv": "^0.4.5"
     }
 }

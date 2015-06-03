@@ -2,6 +2,7 @@
 
 require 'vendor/autoload.php';
 require 'functions.php';
+require 'data_fetcher.php';
 
 use Carbon\Carbon;
 
@@ -19,20 +20,20 @@ define('WORKOUTS_TOTAL', 20);
 define('TEAM_LEAD_TOTAL', 3);
 define('CHALLENGES_TOTAL', 5);
 
-define('NUM_PARTICIPANTS', 121);
-define('START_DATE', '2015-03-01 00:00:00');
-define('END_DATE', '2015-06-01 00:00:00');
-
-
 $app->get('/', function () use ($app) {
-    $app->render('home.php');
+    $data['roster_data'] = [];
+    foreach (DataFetcher::$class_data as $key => $value) {
+        $data['roster_data'][$key] = DataFetcher::getRosters($key);
+    }
+    
+    $app->render('home.php', $data);
 });
 
-$app->get('/stats?roster=:roster', function ($roster) use ($app) {
-    $roster_data = gather_data($roster);
+$app->get('/stats?class=:class&roster=:roster', function ($class, $roster) use ($app) {
+    $roster_data = DataFetcher::getDataForRoster($class, $roster);
 
-    $start_date = Carbon::parse(START_DATE);
-    $end_date = Carbon::parse(END_DATE);
+    $start_date = Carbon::parse(DataFetcher::$class_data[$class]['START_DATE']);
+    $end_date = Carbon::parse(DataFetcher::$class_data[$class]['END_DATE']);
     $total_days = $end_date->diffInDays($start_date);
     $days_done = $start_date->diffInDays(Carbon::now());
 
