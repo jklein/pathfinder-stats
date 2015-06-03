@@ -83,7 +83,7 @@ class DataFetcher {
   
             $date               = $row["ENTRY DATE"];
             $start_time         = $row["ENTRY START TIME "];
-            $duration           = $row["ENTRY DURATION"];
+            $duration           = str_replace(" AM", "", $row["ENTRY DURATION"]);
             $miles              = $row["RUCK MILEAGE LOGGED"];
             $workouts           = $row["RUCK WORKOUT/WOD?"] == 'WORKOUT' ? self::$check_mark : '';
             $team_lead          = $row["WORKOUT TEAM LEADER"] == 'TEAM LEADER' ? self::$check_mark : '';
