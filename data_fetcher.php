@@ -56,7 +56,7 @@ class DataFetcher {
     public static function getDataForRoster($class, $roster) {
         $client = self::getClient();
 
-        $query = "select+D,+E,+F,+G,+H,+I,+J,+K,+L+where+B+starts+with+%27" . $roster . "%27";
+        $query = "select+D,+E,+F,+G,+H,+I,+J,+K,+L+where+M+starts+with+%27" . $roster . "%27";
         $url = self::buildUrl($class, $query);
 
         $response = $client->get($url);
@@ -93,7 +93,7 @@ class DataFetcher {
             $selection_standard = $row["SELECTION STANDARD ATTEMPT"];
             $challenge          = $row["REQUIRED CHALLENGE COMPLETED?"];
             $notes              = str_replace("\n", "<br/>", $row["YOUR NAME and ENTRY NOTES"]);
-            
+
             $return['miles']      += (is_numeric($miles) ? $miles : 0);
             $return['workouts']   += (!empty($workouts) ? 1 : 0);
             $return['team_lead']  += (!empty($team_lead) ? 1 : 0);
