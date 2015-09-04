@@ -12,7 +12,7 @@ function progress_bar($progress, $num_done, $num_total) {
         $text = floor($this_percent) . '% (' . $num_done . ' / ' . $num_total . ')';
     }
 
-    if ($overall_percent === $this_percent) {
+    if ($overall_percent === $this_percent || $num_total === 200) {
         $class = 'info';
     } elseif ($this_percent > $overall_percent) {
         $class = 'success';
