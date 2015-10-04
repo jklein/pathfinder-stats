@@ -15,10 +15,11 @@ $app->config([
     'templates.path' => './templates'
 ]);
 
-define('MILES_TOTAL', 100);
+define('MILES_TOTAL', 75);
+define('MILES_CHALLENGE_TOTAL', 150);
 define('WORKOUTS_TOTAL', 20);
 define('TEAM_LEAD_TOTAL', 3);
-define('CHALLENGES_TOTAL', 5);
+define('CHALLENGES_TOTAL', 4);
 
 $app->get('/', function () use ($app) {
     $data['roster_data'] = [];

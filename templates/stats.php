@@ -9,9 +9,9 @@ include 'header.php'
 <h3>Miles</h3>
 <?=progress_bar($overall_progress, $miles_done, $miles_total);?>    
 
-<?php if ($miles_done > 100) {
-    echo '<h3>Progress Towards 200 Mile Challenge</h3>';
-    echo progress_bar($overall_progress, $miles_done, ($miles_total+100));
+<?php if ($miles_done > MILES_TOTAL) {
+    echo '<h3>Progress Towards ' . MILES_CHALLENGE_TOTAL . ' Mile Challenge</h3>';
+    echo progress_bar($overall_progress, $miles_done, MILES_CHALLENGE_TOTAL);
 } ?>
 
 <h3>Workouts</h3>

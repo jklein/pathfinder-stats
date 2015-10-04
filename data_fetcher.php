@@ -4,16 +4,22 @@ class DataFetcher {
 
     public static $class_data = [
         "005" => [
-            "START_DATE"   => '2015-03-01 00:00:00',
-            "END_DATE"     => '2015-06-01 00:00:00',
-            "KEY"          => '1lAi2-TQPduWoqA7MqyFCpP8ZLaRXzaxq5qbcXAffnvk',
-            'ROSTER_QUERY' => "select+B",
+            "START_DATE"    => '2015-03-01 00:00:00',
+            "END_DATE"      => '2015-06-01 00:00:00',
+            "KEY"           => '1lAi2-TQPduWoqA7MqyFCpP8ZLaRXzaxq5qbcXAffnvk',
+            'ROSTER_COLUMN' => 'B',
         ],
         "006" => [
-            "START_DATE"   => '2015-06-01 00:00:00',
-            "END_DATE"     => '2015-09-01 00:00:00',
-            "KEY"          => '1F3LgSum81KLFkd2a36356c-6jN-gb3C5-wlkKigXDkg',
-            'ROSTER_QUERY' => "select+M",
+            "START_DATE"    => '2015-06-01 00:00:00',
+            "END_DATE"      => '2015-09-01 00:00:00',
+            "KEY"           => '1F3LgSum81KLFkd2a36356c-6jN-gb3C5-wlkKigXDkg',
+            'ROSTER_COLUMN' => 'M',
+        ],
+        "007" => [
+            "START_DATE"    => '2015-10-01 00:00:00',
+            "END_DATE"      => '2016-01-01 00:00:00',
+            "KEY"           => '1Mf3PKQmt__NmMVuiqpS0DJRQaO0KYSk5SUltXVZeuRQ',
+            'ROSTER_COLUMN' => 'B',
         ],
     ];
 
@@ -39,7 +45,7 @@ class DataFetcher {
     public static function getRosters($class) {
         $client = self::getClient();
 
-        $url = self::buildUrl($class, self::$class_data[$class]['ROSTER_QUERY']);
+        $url = self::buildUrl($class, 'select+' . self::$class_data[$class]['ROSTER_COLUMN']);
 
         $response = $client->get($url);
         $body = $response->getBody();
@@ -56,7 +62,7 @@ class DataFetcher {
     public static function getDataForRoster($class, $roster) {
         $client = self::getClient();
 
-        $query = "select+D,+E,+F,+G,+H,+I,+J,+K,+L+where+M+starts+with+%27" . $roster . "%27";
+        $query = "select+D,+E,+F,+G,+H,+I,+J,+K,+L,+M,+N+where+" . self::$class_data[$class]['ROSTER_COLUMN'] . "+starts+with+%27" . $roster . "%27";
         $url = self::buildUrl($class, $query);
 
         $response = $client->get($url);
@@ -91,8 +97,13 @@ class DataFetcher {
             $workouts           = $row["RUCK WORKOUT/WOD?"] == 'WORKOUT' ? self::$check_mark : '';
             $team_lead          = $row["WORKOUT TEAM LEADER"] == 'TEAM LEADER' ? self::$check_mark : '';
             $selection_standard = $row["SELECTION STANDARD ATTEMPT"];
-            $challenge          = $row["REQUIRED CHALLENGE COMPLETED?"];
             $notes              = str_replace("\n", "<br/>", $row["YOUR NAME and ENTRY NOTES"]);
+
+            if (isset($row["REQUIRED CHALLENGE COMPLETED? (4 Unique Required)"])) {
+                $challenge = $row["REQUIRED CHALLENGE COMPLETED? (4 Unique Required)"];
+            } elseif (isset($row["REQUIRED CHALLENGE COMPLETED?"])) {
+                $challenge = $row["REQUIRED CHALLENGE COMPLETED?"];
+            }
 
             $return['miles']      += (is_numeric($miles) ? $miles : 0);
             $return['workouts']   += (!empty($workouts) ? 1 : 0);
